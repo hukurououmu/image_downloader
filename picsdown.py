@@ -39,7 +39,7 @@ def imgDownload():
     except:
         soup = BeautifulSoup(getHTML(), "html5lib")
 
-    for link in tqdm(soup.find_all("img")):
+    for link in tqdm(soup.find_all("img"), desc="> Downloading: "):
         img_src = link.get("src")
         if img_src.endswith(".jpg"):
             yield urljoin(url, img_src)
@@ -52,7 +52,6 @@ def imgDownload():
 
 def save():
     print("> Interrupt the program with Ctrl + C")
-    print("> Downloading...")
     for img_file in imgDownload():
         req = requests.get(img_file)
         img_file = str(uuid.uuid4()) + ".jpg"
