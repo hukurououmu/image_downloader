@@ -1,8 +1,8 @@
 import os
 import time
-from logging import basicConfig, getLogger, DEBUG
-
 import uuid
+from logging import getLogger
+
 from tqdm import tqdm
 import requests
 from requests.compat import urljoin
