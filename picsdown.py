@@ -1,26 +1,33 @@
 import os
 import time
-import uuid
-from logging import getLogger
+from logging import basicConfig, getLogger, DEBUG
 
+import argparse
+import uuid
 from tqdm import tqdm
 import requests
 from requests.compat import urljoin
 from bs4 import BeautifulSoup
 
 
+parser = argparse.ArgumentParser(description="ImageDownloader")
+parser.add_argument("-u", "--url", help="画像をダウンロードしたいウェブページのURLを入力します")
+parser.add_argument("-f", "--format", help="ダウンロードする画像の形式を選択します(jpg or png or gif)")
+args = parser.parse_args()
+
+
 class Scraper:
 
     def __init__(self):
         self.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/75.0"
-        self.url = input("> Enter url: ")
-        self.img_format = input("> Enter format(jpg or png or gif): ")
+        self.url = args.url
+        self.img_format = args.format
 
 
     def get_html(self, url, headers=None):
         logger = getLogger("get_html()")
         try:
-            time.sleep(3)
+            time.sleep(2)
             resp = requests.get(url, headers=headers)
             try:
                 soup = BeautifulSoup(resp.text, "lxml")
@@ -42,7 +49,7 @@ class Scraper:
             soup = self.get_html(self.url, headers)
             if soup != None:
                 for link in tqdm(soup.find_all("img"), desc="> Downloading..."):
-                    time.sleep(3)
+                    time.sleep(2)
                     img_src = link.get("src")
 
                     if img_src.endswith(".jpg"):
